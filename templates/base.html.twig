@@ -12,9 +12,6 @@
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
-        <script>window.user = {{ app.user|serialize('jsonld', {
-            'groups': ['user:read']
-        })|raw }}</script>
     </head>
     <body>
         {% block body %}{% endblock %}
