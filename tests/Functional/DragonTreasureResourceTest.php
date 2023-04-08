@@ -2,11 +2,9 @@
 
 namespace App\Tests\Functional;
 
-use App\Entity\DragonTreasure;
 use App\Factory\DragonTreasureFactory;
 use App\Factory\UserFactory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Zenstruck\Browser\Json;
 use Zenstruck\Browser\Test\HasBrowser;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
