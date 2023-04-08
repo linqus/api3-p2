@@ -12,6 +12,8 @@ api_platform:
 
     swagger:
         api_keys:
+            # ---- overwritten by OpenApiFactoryDecorator
             access_token:
                 name: Authorization
                 type: header
+            # ---- overwritten by OpenApiFactoryDecorator
