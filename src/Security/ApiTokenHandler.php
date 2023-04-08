@@ -29,7 +29,7 @@ class ApiTokenHandler implements AccessTokenHandlerInterface
         if (!$apiToken->isValid()) {
             throw new CustomUserMessageAuthenticationException('token expired');
         }
-
+        $apiToken->getOwnedBy()->markAsTokenAuthenticated($apiToken->getScope());
         return new UserBadge($apiToken->getOwnedBy()->getUserIdentifier());
     }
 }

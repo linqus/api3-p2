@@ -1,4 +1,7 @@
 security:
+
+    role_hierarchy:
+        ROLE_FULL_USER: [ROLE_USER_EDIT, ROLE_TREASURE_CREATE, ROLE_TREASURE_EDIT]
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
