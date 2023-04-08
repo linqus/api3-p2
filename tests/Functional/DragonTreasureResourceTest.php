@@ -19,12 +19,14 @@ class DragonTreasureResourceTest extends KernelTestCase
 
         DragonTreasureFactory::createMany(5);
 
-        $this->browser()
+        $json = $this->browser()
             ->get('/api/treasures')
             ->assertJson()
             ->assertJsonMatches('"hydra:totalItems"',5)
-            ->use(function (Json $json) {
-                $json->assertMatches('keys("hydra:member"[0])',[  
+            ->json()
+        ;
+    
+        $json->assertMatches('keys("hydra:member"[0])',[  
                     0 => "@id",
                     1 => "@type",
                     2 => "name",
@@ -35,7 +37,7 @@ class DragonTreasureResourceTest extends KernelTestCase
                     7 => "shortDescription",
                     8 => "plunderedAtAgo",
                 ]);
-            })
-            ;
+            
+        
     }
 }
