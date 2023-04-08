@@ -43,20 +43,25 @@ class DragonTreasureResourceTest extends KernelTestCase
     
     public function testPostToCreateTreasure(): void
     {
-        $user = UserFactory::createOne(['password'=>'pass']);
+        $user = UserFactory::createOne();
         $this->browser()
-            ->post('/login', [
-                'json' => [
-                    'email' => $user->getEmail(),
-                    'password' => 'pass',
-                ],
-            ])
-            ->assertStatus(204)
+            ->actingAs($user)
             ->post('/api/treasures', [
                 'json' => [],
             ])
             ->assertStatus(422)
+            ->post('/api/treasures', [
+                'json' => [
+                    'name' => 'A thing',
+                    'description' => 'nice to have thing',
+                    'value' => 1000,
+                    'coolFactor' => 1,
+                    'owner' => '/api/users/'.$user->getId(),
+                ],
+            ])
+            ->assertStatus(201)
             ->dump()
+            ->assertJsonMatches('name','A thing')
 
         ;
     }
