@@ -2,6 +2,8 @@
 
 namespace App\Tests\Functional;
 
+use App\Entity\ApiToken;
+use App\Factory\ApiTokenFactory;
 use App\Factory\DragonTreasureFactory;
 use App\Factory\UserFactory;
 use Zenstruck\Browser\HttpOptions;
@@ -60,6 +62,37 @@ class DragonTreasureResourceTest extends ApiTestCase
             ->assertStatus(201)
             ->assertJsonMatches('name','A thing')
 
+        ;
+    }
+
+    public function testPostToCreateTreasureWithApi(): void
+    {
+        $user = UserFactory::createOne();
+        $apiToken = ApiTokenFactory::createOne([
+            'scope' => [
+                'ROLE_TREASURE_CREATE',
+            ],
+            'ownedBy' => $user,
+        ]);
+        //dd($user);
+        //dd($apiToken);
+
+        $this->browser()
+            ->post('/api/treasures',[
+                'json'=>[
+                    'name' => 'A thingy',
+                    'description' => 'nice to have thing',
+                    'value' => 1000,
+                    'coolFactor' => 1,
+                    'owner' => '/api/users/'.$user->getId(),
+                ],
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $apiToken->getToken(),
+                ],
+            ])
+            ->assertStatus(201)
+            ->assertJsonMatches('name','A thingy')
+            ->dump()
         ;
     }
 }
