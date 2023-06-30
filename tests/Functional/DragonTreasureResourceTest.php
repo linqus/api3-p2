@@ -92,7 +92,6 @@ class DragonTreasureResourceTest extends ApiTestCase
             ])
             ->assertStatus(201)
             ->assertJsonMatches('name','A thingy')
-            ->dump()
         ;
     }
 
@@ -142,5 +141,32 @@ class DragonTreasureResourceTest extends ApiTestCase
             ->assertStatus(403)
         ;
 
+    }
+
+    public function testAdminUserCanPatchToEditTreasure(): void
+    {
+        $admin = UserFactory::new()->asAdmin()->create();
+        $treasure = DragonTreasureFactory::createOne([
+            'value'=>12345,
+        ]);
+
+        $this->browser()
+            ->actingAs($admin)
+            ->patch('/api/treasures/'.$treasure->getId(),[
+                'json' => [
+                    'value' => 234,
+                ]
+            ])
+            ->assertStatus(200)
+            ->assertJsonMatches('value',234)
+
+            ->patch('/api/treasures/'.$treasure->getId(),[
+                'json' => [
+                    'owner' => '/api/users/'.$admin->getId(),
+                ]
+            ])
+            ->assertStatus(200)
+            ->assertJsonMatches('owner','/api/users/'.$admin->getId())
+        ;
     }
 }
