@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
+use ApiPlatform\GraphQl\Resolver\Stage\SecurityPostDenormalizeStage;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
@@ -36,8 +37,10 @@ use function Symfony\Component\String\u;
         ),
         new GetCollection(),
         new Post(security: 'is_granted("ROLE_TREASURE_CREATE")'),
-        new Put(security: 'is_granted("ROLE_TREASURE_EDIT")'),
-        new Patch(security: 'is_granted("ROLE_TREASURE_EDIT")'),
+        new Patch(
+            security: 'is_granted("ROLE_TREASURE_EDIT") and object.getOwner() == user',
+            securityPostDenormalize: 'object.getOwner() == user',
+        ),
         new Delete(security: 'is_granted("ROLE_ADMIN")'),
     ],
     formats: [
