@@ -7,6 +7,7 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
 use ApiPlatform\GraphQl\Resolver\Stage\SecurityPostDenormalizeStage;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -122,6 +123,8 @@ class DragonTreasure
 
     #[ORM\Column]
     #[ApiFilter(BooleanFilter::class)]
+    #[Groups(['treasure:read','treasure:write'])]
+    #[ApiProperty(security: 'is_granted("SHOW_PUBLISHED", object)')]
     private bool $isPublished = false;
 
     #[ORM\ManyToOne(inversedBy: 'dragonTreasures')]

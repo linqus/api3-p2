@@ -21,7 +21,7 @@ class DragonTreasureVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::EDIT])
+        return in_array($attribute, [self::EDIT, 'SHOW_PUBLISHED'])
             && $subject instanceof DragonTreasure;
     }
 
@@ -47,11 +47,22 @@ class DragonTreasureVoter extends Voter
                 if ($subject->getOwner() === $user ) {
                     return true;
                 }
-                break;
 
                 if ($this->security->isGranted('ROLE_TREASURE_EDIT')) {
                     return true;
                 }
+
+                break;
+
+
+            case 'SHOW_PUBLISHED':
+                if ($subject->getOwner() === $user ) {
+                    return true;
+                }
+                
+                break;
+
+
         }
 
         return false;
