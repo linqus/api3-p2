@@ -49,7 +49,7 @@ class DragonTreasureVoter extends Voter
                 }
 
                 if ($this->security->isGranted('ROLE_TREASURE_EDIT')) {
-                    return true;
+                //    return true;
                 }
 
                 break;
