@@ -28,9 +28,12 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(),
         new Get(),
-        new Post(security: 'is_granted("PUBLIC_ACCESS")'),
-        new Put(security: 'is_granted("ROLE_USER_EDIR")'),
-        new Patch(security: 'is_granted("ROLE_USER_EDIR")'),
+        new Post(
+            security: 'is_granted("PUBLIC_ACCESS")',
+            validationContext: ['groups' => ['Default', 'postValidation']],
+        ),
+        new Put(security: 'is_granted("ROLE_USER_EDIT")'),
+        new Patch(security: 'is_granted("ROLE_USER_EDIT")'),
         new Delete(),
     ],
     normalizationContext: ['groups' => ['user:read']],
@@ -82,6 +85,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Groups(['user:write'])]
     #[SerializedName('password')]
+    #[Assert\NotBlank(groups: ['postValidation'])]
     private ?string $plainPassword = null;
 
     #[ORM\Column(length: 255, unique: true)]
@@ -173,7 +177,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPlainPassword(): string
+    public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
     }
